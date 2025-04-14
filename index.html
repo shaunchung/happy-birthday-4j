@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Celebration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            position: relative;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 20px;
+            pointer-events: none;
+        }
+        
+        .birthday-text {
+            position: absolute;
+            color: #ff4081;
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            pointer-events: none;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease-out;
+            animation: grow 1s forwards;
+        }
+        
+        @keyframes grow {
+            0% {
+                opacity: 0;
+                transform: scale(0);
+            }
+            70% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                background-image: url('../PhotoTest/img/schkm-small.jpg');
+            }
+
+            .birthday-text {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Wait for the DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set the initial background image to the original size image
+            document.body.style.backgroundImage = 'url("../PhotoTest/img/schkm.jpg")';
+            
+            // Add click event listener to the body
+            document.body.addEventListener('click', function(event) {
+                createConfetti(event.clientX, event.clientY);
+                createBirthdayText(event.clientX, event.clientY);
+            });
+        });
+
+        // Function to create confetti at the clicked position
+        function createConfetti(x, y) {
+            const colors = ['#ff4081', '#3f51b5', '#ffeb3b', '#4caf50', '#ff9800', '#9c27b0'];
+            
+            // Create multiple confetti pieces
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                
+                // Random properties for each confetti
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const size = Math.random() * 10 + 5;
+                const angle = Math.random() * 360;
+                const distance = Math.random() * 200 + 50;
+                const duration = Math.random() * 3 + 2;
+                const opacity = Math.random() + 0.5;
+                
+                // Apply styles
+                confetti.style.backgroundColor = color;
+                confetti.style.width = `${size}px`;
+                confetti.style.height = `${size * 1.5}px`;
+                confetti.style.left = `${x}px`;
+                confetti.style.top = `${y}px`;
+                confetti.style.opacity = opacity;
+                confetti.style.transform = `rotate(${angle}deg)`;
+                
+                document.body.appendChild(confetti);
+                
+                // Animate the confetti falling
+                setTimeout(() => {
+                    confetti.style.transition = `all ${duration}s ease-out`;
+                    confetti.style.transform = `translate(${Math.random() * distance - distance/2}px, ${distance}px) rotate(${angle + Math.random() * 360}deg)`;
+                    confetti.style.opacity = '0';
+                }, 10);
+                
+                // Remove confetti element after animation completes
+                setTimeout(() => {
+                    confetti.remove();
+                }, duration * 1000);
+            }
+        }
+        
+        // Function to create "Happy Birthday" text at the clicked position
+        function createBirthdayText(x, y) {
+            const birthdayText = document.createElement('div');
+            birthdayText.className = 'birthday-text';
+            birthdayText.textContent = 'Happy Birthday!';
+            
+            // Adjust position to center text at click point
+            birthdayText.style.left = `${x - 100}px`;
+            birthdayText.style.top = `${y - 30}px`;
+            
+            document.body.appendChild(birthdayText);
+            
+            // Remove the text after animation
+            setTimeout(() => {
+                birthdayText.style.opacity = '0';
+                birthdayText.style.transform = 'scale(0.5) translateY(-20px)';
+                birthdayText.style.transition = 'all 0.5s ease-out';
+                
+                setTimeout(() => {
+                    birthdayText.remove();
+                }, 500);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
